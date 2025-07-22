@@ -161,6 +161,18 @@
         "type": "github"
       }
     },
+    "mold-nixpkgs": {
+      "locked": {
+        "lastModified": 1665483364,
+        "narHash": "sha256-sisuhAPPjYB92YlcyoVEcTh5teuAkL9NW8UVexRsfoo=",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/e0ed589d7422c1d7a1bdd1e81289e2428c6ec2a3.zip"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/e0ed589d7422c1d7a1bdd1e81289e2428c6ec2a3.zip"
+      }
+    },
     "neovim-src": {
       "flake": false,
       "locked": {
@@ -233,7 +245,7 @@
         "type": "github"
       }
     },
-    "oldnixpkgs": {
+    "node18-nixpkgs": {
       "locked": {
         "lastModified": 1731603435,
         "narHash": "sha256-CqCX4JG7UiHvkrBTpYC3wcEurvbtTADLbo3Ns2CEoL8=",
@@ -247,9 +259,31 @@
     },
     "root": {
       "inputs": {
+        "mold-nixpkgs": "mold-nixpkgs",
         "nixpkgs": "nixpkgs",
-        "oldnixpkgs": "oldnixpkgs",
+        "node18-nixpkgs": "node18-nixpkgs",
+        "rust-overlay": "rust-overlay",
         "tolerable": "tolerable"
+      }
+    },
+    "rust-overlay": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1753156081,
+        "narHash": "sha256-N+8LM+zvS6cP+VG2vxgEEDCyX1T9EUq9wXTSvGwX9TM=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "8610c0f3801fc8dec7eb4b79c95fb39d16f38a80",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
       }
     },
     "tolerable": {

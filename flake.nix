@@ -3,13 +3,22 @@
 
   outputs = {
     nixpkgs,
-    oldnixpkgs,
+    node18-nixpkgs,
+    mold-nixpkgs,
     tolerable,
+    rust-overlay,
     ...
   } @ inputs: let
     system = "x86_64-linux";
-    pkgs = import nixpkgs {inherit system;};
-    oldPkgs = import oldnixpkgs {
+    pkgs = import nixpkgs {
+      inherit system;
+      overlays = [rust-overlay.overlays.default];
+    };
+    node18Pkgs = import node18-nixpkgs {
+      inherit system;
+      config.allowBroken = true;
+    };
+    moldPkgs = import mold-nixpkgs {
       inherit system;
       config.allowBroken = true;
     };
@@ -37,9 +46,11 @@
       };
       path = with pkgs;
         [
-          oldPkgs.nodejs_18
-          rustc
-          cargo
+          rust-bin.stable."1.81.0".default
+
+          node18Pkgs.nodejs_18
+          moldPkgs.mold
+
           rust-analyzer
           curl
           ripgrep
@@ -49,7 +60,7 @@
           postgresql
           pkg-config
         ]
-        ++ pkgs.callPackage ./node-pkgs.nix {customNodeJS = oldPkgs.nodejs_18;};
+        ++ pkgs.callPackage ./node-pkgs.nix {customNodeJS = node18Pkgs.nodejs_18;};
     };
   in {
     packages.x86_64-linux.default = neovimConfig1;
@@ -65,7 +76,13 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
-    oldnixpkgs.url = "https://github.com/NixOS/nixpkgs/archive/8b27c12.tar.gz";
+
+    # pinned nixpkgs
+    node18-nixpkgs.url = "https://github.com/NixOS/nixpkgs/archive/8b27c12.tar.gz";
+    mold-nixpkgs.url = "https://github.com/NixOS/nixpkgs/archive/e0ed589d7422c1d7a1bdd1e81289e2428c6ec2a3.zip";
+
+    rust-overlay.url = "github:oxalica/rust-overlay";
+    rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
 
     tolerable.url = "github:wires-org/tolerable-nvim-nix";
     tolerable.inputs.nixpkgs.follows = "nixpkgs";
